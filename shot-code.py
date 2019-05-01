@@ -10,7 +10,7 @@ from matplotlib.patches import Ellipse
     
 #img_path = input('image path?')
 #img = cv2.imread(img_path)
-img = cv2.imread('/media/a/9C8EE61C8EE5EF28/patra/patra project/shot code/DSC_6661.JPG')
+#img = cv2.imread('shot-code-recognition/DSC_6661.JPG')
 img_draw = img
 s = img.shape
 img = cv2.cvtColor(img[700:s[2]-400, 1000:s[1]-820], cv2.COLOR_BGR2GRAY)
@@ -55,7 +55,7 @@ img_5 = cv2.Canny(img_4,0,200)
 
 ########################################################Annotation##############################################################################
 Dic = {}
-with open('/media/a/9C8EE61C8EE5EF28/patra/least-squares-ellipse-fitting-master/annotation.txt', 'r') as f:
+with open('shot-code-recognition/annotation.txt', 'r') as f:
    A = [line.split() for line in f]
    for j in range(0,len(A)):
        Ant = np.zeros((1,len(A[j])))
@@ -71,12 +71,9 @@ with open('/media/a/9C8EE61C8EE5EF28/patra/least-squares-ellipse-fitting-master/
 _, contours, _ = cv2.findContours(img_5, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 for (counter,cnt) in enumerate(contours):
-    #(x,y,w,h) = cv2.boundingRect(contours[60])
     (x,y,w,h) = cv2.boundingRect(cnt)
     ROI = img_prime[4*y-5:4*(y+h)+5,4*x-5:4*(x+w)+5]
-    #cv2.rectangle(img_draw, (x, y), (x+w, y+h), (0,255,255), 2)
-
-
+   
 #### obtain all the subedges of the ROI, if there is just one subregion, ignore it
  
     EDG = cv2.Canny(ROI,0,255)
@@ -240,8 +237,6 @@ for (counter,cnt) in enumerate(contours):
     o[1] = o[1]-3 
     D = WIDTH[m_er] + o[1] + 7
 
-    #cv2.imshow('1', EDG_rot)
-    #cv2.waitKey(0)  
     print(gama[0]) 
     o = np.array((int(CENTER[m_er][0]),int(CENTER[m_er][1])))
     if gama[0][0] <= 0.09 or gama[0][-1] >= 6.2:
@@ -251,8 +246,6 @@ for (counter,cnt) in enumerate(contours):
        o[0] = o[0]-3
        o[1] = o[1]-3 
 
-    #cv2.imshow('2', EDG_rot)
-    #cv2.waitKey(0)
     d = int(D)
     while d < EDG_rot.shape[1]:
           if EDG_rot[o[0]][d]!=255:
@@ -260,20 +253,12 @@ for (counter,cnt) in enumerate(contours):
              d = d + 2
           else:
              d = d + 1
-
-    #for d in range(int(D),EDG_rot.shape[1]):
-     #   if EDG_rot[o[0]][d]!=255:
-      #        count = count + 1
-       #       print(d)
-       # EDG_rot[o[0]][d] = 0 
-    #if count==0 and gama[0][0]<0.05:
-       #N = N[1:len(N)] + (N[0],)
+	
     if gama[0][-1] >= 6.2 and count <= 1:
        N = N[1:len(N)] + (N[0],)
     if count<8 and count>1 and gama[0][-1]< 6.2: 
        N = N[1:len(N)] + (N[0],)
 
-    
     print(count)
     print 'sequence:', N    
     print(counter)
@@ -293,13 +278,8 @@ for (counter,cnt) in enumerate(contours):
 
     if flag ==0:
        print('could not find the code')
-    #cv2.imshow('1', EDG_rot)
-    #cv2.waitKey(0)
+   
     EDG_rot = cv2.resize(EDG_rot, (0,0), fx=1, fy=float(a)/float(b))
-    #print(float(a)/b)
-    #cv2.imshow('image', EDG_rot)
-    #cv2.waitKey(0)
-
 
 cv2.imwrite('6659.jpg',img_draw)
 cv2.imshow('result', img_draw)
