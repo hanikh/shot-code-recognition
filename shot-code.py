@@ -8,9 +8,8 @@ from matplotlib.patches import Ellipse
 
 #### reading the image, cropping the region of interest, change it to grayscale, and resizing it
     
-#img_path = input('image path?')
-#img = cv2.imread(img_path)
-#img = cv2.imread('shot-code-recognition/DSC_6661.JPG')
+img_path = input('image path?')
+img = cv2.imread(img_path)
 img_draw = img
 s = img.shape
 img = cv2.cvtColor(img[700:s[2]-400, 1000:s[1]-820], cv2.COLOR_BGR2GRAY)
@@ -168,9 +167,6 @@ for (counter,cnt) in enumerate(contours):
     im_res = cv2.resize(im_test, (0,0), fx=1, fy=float(a)/float(b))
 
     im_res = np.array(im_res, dtype=np.uint8)
-    #im_res[int(CENTER[m_er][0]*float(a)/float(b))][int(CENTER[m_er][1])]= 255
-    #cv2.imshow('point',im_res)
-    #cv2.waitKey(0)
     
     p_prime = np.zeros((len(p),2))
     _, testcon, _ = cv2.findContours(im_res.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
@@ -224,12 +220,9 @@ for (counter,cnt) in enumerate(contours):
 
     n_t = map(tuple,n)
     N = n_t[0]
-    #print 'seq', N
-    
+ 
     count = 0
     EDG_n = cv2.bitwise_not(EDG)
-    #cv2.imshow('EDGn',EDG_n)
-    #cv2.waitKey(0)
     
     EDG_rot = cv2.warpAffine(EDG_n,M,(cols,rows))
     EDG_rot = EDG_rot[3:EDG_rot.shape[0]-3, 3:EDG_rot.shape[1]-3] 
